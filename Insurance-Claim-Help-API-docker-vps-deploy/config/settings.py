@@ -49,6 +49,17 @@ SECRET_KEY = os.getenv(
 DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 
 ALLOWED_HOSTS = env_list("ALLOWED_HOSTS", "127.0.0.1,localhost")
+for host in (
+    "127.0.0.1",
+    "localhost",
+    "api",
+    "microservice",
+    "host.docker.internal",
+    "insurance-api",
+    "insurance-microservice",
+):
+    if host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(host)
 CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS")
 USE_X_FORWARDED_HOST = os.getenv("USE_X_FORWARDED_HOST", "False").lower() == "true"
 SECURE_SSL_REDIRECT = os.getenv("SECURE_SSL_REDIRECT", "False").lower() == "true"

@@ -11,6 +11,10 @@ logger = logging.getLogger(__name__)
 
 GEMINI_TIMEOUT_SECONDS = 30
 
+
+class GeminiConfigurationError(RuntimeError):
+    pass
+
 GEMINI_PROMPT = """
 You are an expert room inspector. Analyse this room image carefully and return ONLY a
 valid JSON object — no markdown, no extra text — in exactly this shape:
@@ -80,7 +84,7 @@ def _get_gemini_model():
     )
 
     if not api_key:
-        raise RuntimeError(
+        raise GeminiConfigurationError(
             "GEMINI_API_KEY is not set. "
             "Define it before calling the room-analysis endpoint."
         )

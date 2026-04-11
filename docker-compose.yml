@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   # MySQL Database shared by both Django services
   db:
@@ -8,6 +6,7 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
+      MYSQL_DATABASE: insurance_claim_help
     healthcheck:
       test:
         [
@@ -22,8 +21,8 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - insurance-network
-    ports:
-      - "3306:3306"
+    expose:
+      - "3306"
 
   # Redis for Celery
   redis:
@@ -39,8 +38,8 @@ services:
       - redis_data:/data
     networks:
       - insurance-network
-    ports:
-      - "6379:6379"
+    expose:
+      - "6379"
 
   # Main Insurance API
   api:
@@ -50,7 +49,14 @@ services:
     container_name: insurance-api
     image: insurance-claim-help:latest
     env_file:
-      - ./Insurance-Claim-Help-API-docker-vps-deploy/.env.local
+      - ./Insurance-Claim-Help-API-docker-vps-deploy/.env
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
+      MICROSERVICE_API_BASE_URL: http://microservice:8000/api/
+      MICROSERVICE_INTERNAL_API_BASE_URL: http://microservice:8000/api/
     restart: unless-stopped
     depends_on:
       db:
@@ -72,9 +78,13 @@ services:
     container_name: insurance-microservice
     image: insurance-claim-microservice:latest
     env_file:
-      - ./Insurance-Claim-Help-Microservice-docker-vps-deploy/.env.local
+      - ./Insurance-Claim-Help-Microservice-docker-vps-deploy/.env
     environment:
       INTERNAL_PROPERTY_API_BASE_URL: http://api:8000/api/
+      PROPERTY_API_BASE_URL: http://api:8000/api/
+      LARAVEL_API_BASE_URL: http://api:8000/api/
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
     restart: unless-stopped
     depends_on:
       db:
@@ -98,9 +108,13 @@ services:
     container_name: insurance-worker
     image: insurance-claim-microservice:latest
     env_file:
-      - ./Insurance-Claim-Help-Microservice-docker-vps-deploy/.env.local
+      - ./Insurance-Claim-Help-Microservice-docker-vps-deploy/.env
     environment:
       INTERNAL_PROPERTY_API_BASE_URL: http://api:8000/api/
+      PROPERTY_API_BASE_URL: http://api:8000/api/
+      LARAVEL_API_BASE_URL: http://api:8000/api/
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
     restart: unless-stopped
     depends_on:
       db:

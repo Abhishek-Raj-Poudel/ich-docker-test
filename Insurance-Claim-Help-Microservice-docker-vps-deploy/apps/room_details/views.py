@@ -19,7 +19,7 @@ from apps.materials.services import get_materials_catalog
 from apps.repair_items.models import RepairItem
 from apps.report.models import Report
 from apps.report.services import fetch_property_context_safe
-from .gemini import run_gemini_room_workflow
+from .gemini import GeminiConfigurationError, run_gemini_room_workflow
 from .tasks import run_nerf_pipeline
 
 logger = logging.getLogger(__name__)
@@ -234,6 +234,17 @@ class RoomAnalyzeView(APIView):
                 mime_type=mime_type,
                 request_id=request_id,
                 materials_catalog=materials_catalog,
+            )
+        except GeminiConfigurationError as exc:
+            logger.warning("[%s] Gemini configuration error: %s", request_id, exc)
+            return Response(
+                {
+                    "error": (
+                        "AI analysis is not configured. Set GEMINI_API_KEY in the "
+                        "microservice environment and try again."
+                    )
+                },
+                status=503,
             )
         except Exception:
             logger.exception("[%s] Gemini analysis failed before persistence.", request_id)

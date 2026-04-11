@@ -56,6 +56,8 @@ ALLOWED_HOSTS = config(
 for host in (
     "127.0.0.1",
     "localhost",
+    "api",
+    "microservice",
     "host.docker.internal",
     "insurance-api",
     "insurance-microservice",
