@@ -13,10 +13,15 @@ RUN pnpm install --frozen-lockfile
 
 FROM node:22-bookworm-slim AS builder
 
+ARG NEXT_PUBLIC_API_URL=http://localhost:8000/api
+ARG NEXT_PUBLIC_MICROSERVICE_URL=http://localhost:8001/api
+
 ENV PNPM_HOME="/pnpm" \
     PATH="/pnpm:$PATH" \
     HUSKY=0 \
-    NODE_ENV=production
+    NODE_ENV=production \
+    NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
+    NEXT_PUBLIC_MICROSERVICE_URL=$NEXT_PUBLIC_MICROSERVICE_URL
 
 WORKDIR /app
 
