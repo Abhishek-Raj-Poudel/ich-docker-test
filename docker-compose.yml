@@ -127,28 +127,6 @@ services:
       - insurance-network
     command: celery -A Insurance_Claim worker -l info
 
-  # Next.js Frontend
-  # Next.js Frontend
-  frontend:
-    build:
-      context: ./insurance-claim-site-pwa-main
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://api.abhishekrajpoudel.com.np}
-        NEXT_PUBLIC_MICROSERVICE_URL: ${NEXT_PUBLIC_MICROSERVICE_URL:-https://microservice.abhishekrajpoudel.com.np}
-    container_name: insurance-frontend
-    image: insurance-claim-help-frontend:latest
-    restart: unless-stopped
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=production
-      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-https://api.abhishekrajpoudel.com.np}
-      - NEXT_PUBLIC_MICROSERVICE_URL=${NEXT_PUBLIC_MICROSERVICE_URL:-https://microservice.abhishekrajpoudel.com.np}
-    networks:
-      - insurance-network
-    command: pnpm start -H 0.0.0.0
-
 volumes:
   mysql_data:
   redis_data:
