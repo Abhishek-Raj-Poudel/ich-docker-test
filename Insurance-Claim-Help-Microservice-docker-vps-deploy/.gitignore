@@ -1,0 +1,11 @@
+venv/
+.env
+.env.production
+media/
+*.pt
+ai_model/
+dump.rdb
+.DS_Store
+__pycache__/
+*.py[cod]
+db.sqlite3
