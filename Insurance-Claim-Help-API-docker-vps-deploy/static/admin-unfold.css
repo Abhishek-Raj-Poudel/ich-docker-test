@@ -1,6 +1,0 @@
-aside [class*="logo"] img,
-aside a[href="/admin/"] img,
-aside a[href="/admin"] img {
-    max-height: 64px !important;
-    width: auto !important;
-}

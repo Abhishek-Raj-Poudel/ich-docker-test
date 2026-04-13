@@ -39,11 +39,11 @@ services:
   # Main Insurance API
   api:
     build:
-      context: ./Insurance-Claim-Help-API-docker-vps-deploy
+      context: ./Insurance-Claim-Help-API
       dockerfile: Dockerfile
     image: insurance-claim-help:latest
     env_file:
-      - ./Insurance-Claim-Help-API-docker-vps-deploy/.env.production
+      - ./Insurance-Claim-Help-API/.env
     restart: always
     depends_on:
       db:
@@ -60,11 +60,11 @@ services:
   # Microservice (Room Analysis)
   microservice:
     build:
-      context: ./Insurance-Claim-Help-Microservice-docker-vps-deploy
+      context: ./Insurance-Claim-Help-Microservice
       dockerfile: Dockerfile
     image: insurance-claim-microservice:latest
     env_file:
-      - ./Insurance-Claim-Help-Microservice-docker-vps-deploy/.env.production
+      - ./Insurance-Claim-Help-Microservice/.env
     environment:
       INTERNAL_PROPERTY_API_BASE_URL: http://api:8000/api/
     restart: always
@@ -85,11 +85,11 @@ services:
   # Celery Worker for async tasks
   worker:
     build:
-      context: ./Insurance-Claim-Help-Microservice-docker-vps-deploy
+      context: ./Insurance-Claim-Help-Microservice
       dockerfile: Dockerfile
     image: insurance-claim-microservice:latest
     env_file:
-      - ./Insurance-Claim-Help-Microservice-docker-vps-deploy/.env.production
+      - ./Insurance-Claim-Help-Microservice/.env
     environment:
       INTERNAL_PROPERTY_API_BASE_URL: http://api:8000/api/
     restart: always

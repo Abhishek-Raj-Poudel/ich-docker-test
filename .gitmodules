@@ -1,0 +1,6 @@
+[submodule "Insurance-Claim-Help-Microservice"]
+	path = Insurance-Claim-Help-Microservice
+	url = git@github.com:NischalShresthaOfficial/Insurance-Claim-Help-Microservice.git
+[submodule "Insurance-Claim-Help-API"]
+	path = Insurance-Claim-Help-API
+	url = git@github.com:NischalShresthaOfficial/Insurance-Claim-Help-API.git

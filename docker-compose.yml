@@ -44,12 +44,12 @@ services:
   # Main Insurance API
   api:
     build:
-      context: ./Insurance-Claim-Help-API-docker-vps-deploy
+      context: ./Insurance-Claim-Help-API
       dockerfile: Dockerfile
     container_name: insurance-api
     image: insurance-claim-help:latest
     env_file:
-      - ./Insurance-Claim-Help-API-docker-vps-deploy/.env
+      - ./Insurance-Claim-Help-API/.env
     environment:
       DB_HOST: db
       DB_PORT: 3306
@@ -73,12 +73,12 @@ services:
   # Microservice (Room Analysis)
   microservice:
     build:
-      context: ./Insurance-Claim-Help-Microservice-docker-vps-deploy
+      context: ./Insurance-Claim-Help-Microservice
       dockerfile: Dockerfile
     container_name: insurance-microservice
     image: insurance-claim-microservice:latest
     env_file:
-      - ./Insurance-Claim-Help-Microservice-docker-vps-deploy/.env
+      - ./Insurance-Claim-Help-Microservice/.env
     environment:
       INTERNAL_PROPERTY_API_BASE_URL: http://api:8000/api/
       PROPERTY_API_BASE_URL: http://api:8000/api/
@@ -103,12 +103,12 @@ services:
   # Celery Worker for async tasks
   worker:
     build:
-      context: ./Insurance-Claim-Help-Microservice-docker-vps-deploy
+      context: ./Insurance-Claim-Help-Microservice
       dockerfile: Dockerfile
     container_name: insurance-worker
     image: insurance-claim-microservice:latest
     env_file:
-      - ./Insurance-Claim-Help-Microservice-docker-vps-deploy/.env
+      - ./Insurance-Claim-Help-Microservice/.env
     environment:
       INTERNAL_PROPERTY_API_BASE_URL: http://api:8000/api/
       PROPERTY_API_BASE_URL: http://api:8000/api/
