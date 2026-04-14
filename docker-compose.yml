@@ -55,11 +55,14 @@ services:
       DB_PORT: 3306
       DB_USER: root
       DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
+      REDIS_URL: redis://redis:6379/1
       MICROSERVICE_API_BASE_URL: http://microservice:8000/api/
       MICROSERVICE_INTERNAL_API_BASE_URL: http://microservice:8000/api/
     restart: unless-stopped
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     ports:
       - "8000:8000"
@@ -68,7 +71,7 @@ services:
       - api_static:/app/staticfiles
     networks:
       - insurance-network
-    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2
+    command: daphne -b 0.0.0.0 -p 8000 config.asgi:application
 
   # Microservice (Room Analysis)
   microservice:
